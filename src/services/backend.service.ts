@@ -7,7 +7,7 @@ const BASE_URL = process.env.REACT_APP_BACKEND_URL || "";
 const http = axios.create();
 
 function getBackendUrl(url: string) {
-  return `${BASE_URL}/${url}`;
+  return `${BASE_URL}/api/${url}`;
 }
 
 function getBackendHeaders(headers: any) {
@@ -16,28 +16,28 @@ function getBackendHeaders(headers: any) {
   return { ...authHeader, ...headers };
 }
 
-function get(url: string, headers: any = {}, params: any = {}) {
+export function get(url: string, headers: any = {}, params: any = {}) {
   return http.get(getBackendUrl(url), {
     headers: getBackendHeaders(headers),
     ...params,
   });
 }
 
-function post(url: string, data: any, headers: any = {}, params: any = {}) {
+export function post(url: string, data: any, headers: any = {}, params: any = {}) {
   return http.post(getBackendUrl(url), data, {
     headers: getBackendHeaders(headers),
     ...params,
   });
 }
 
-function patch(url: string, data: any, headers: any = {}, params: any = {}) {
+export function patch(url: string, data: any, headers: any = {}, params: any = {}) {
   return http.patch(getBackendUrl(url), data, {
     headers: getBackendHeaders(headers),
     ...params,
   });
 }
 
-function remove(url: string, data: any, headers: any = {}, params: any = {}) {
+export function remove(url: string, data: any, headers: any = {}, params: any = {}) {
   return http.delete(getBackendUrl(url), {
     headers: getBackendHeaders(headers),
     ...params,
