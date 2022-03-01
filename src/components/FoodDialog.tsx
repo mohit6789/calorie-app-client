@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useEffect, useState } from "react";
+import React, { FC, useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -32,7 +32,7 @@ const FoodDialog: FC<Props> = ({
 
   useEffect(() => {
     reset(selectedFoodItem);
-  }, [selectedFoodItem]);
+  }, [selectedFoodItem, reset]);
 
   const onSubmit: SubmitHandler<Food> = (data) => {
     data = {

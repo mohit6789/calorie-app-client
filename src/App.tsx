@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Unauthorised from "./pages/Unauthorised";
 import PrivateRoute from "./components/PrivateRoute";
 import { Box } from "@mui/material";
+import { Navigate } from "react-router-dom";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             }
           />
           <Route path="/unauthorised" element={<Unauthorised />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Box>
     </div>
