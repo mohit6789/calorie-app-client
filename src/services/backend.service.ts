@@ -37,7 +37,7 @@ export function patch(url: string, data: any, headers: any = {}, params: any = {
   });
 }
 
-export function remove(url: string, data: any, headers: any = {}, params: any = {}) {
+export function remove(url: string, headers: any = {}, params: any = {}) {
   return http.delete(getBackendUrl(url), {
     headers: getBackendHeaders(headers),
     ...params,

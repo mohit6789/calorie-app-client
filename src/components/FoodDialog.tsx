@@ -9,10 +9,16 @@ import { Food } from "../types/food";
 type Props = {
   isOpen: boolean;
   closeDialog: () => void;
+  onSave: (food: Food) => void;
   selectedFoodItem: Food;
 };
 
-const FoodDialog: FC<Props> = ({ isOpen, closeDialog, selectedFoodItem }) => {
+const FoodDialog: FC<Props> = ({
+  isOpen,
+  selectedFoodItem,
+  closeDialog,
+  onSave,
+}) => {
   const isEditMode = !!selectedFoodItem.id;
   const [foodItem, setFoodItem] = useState<Food>(selectedFoodItem);
 
@@ -27,19 +33,22 @@ const FoodDialog: FC<Props> = ({ isOpen, closeDialog, selectedFoodItem }) => {
   }, [selectedFoodItem]);
 
   const onSubmit: SubmitHandler<Food> = (data) => {
-    
+    onSave(data);
   };
 
   const hasError = (fieldName: keyof Food) => {
     return !!errors[fieldName];
-  }
+  };
 
   const getError = (fieldName: keyof Food) => {
     const error = errors[fieldName];
-    
-    if(error?.type === 'required') {
-      return "This is required field.";
-    } 
+    return error?.message;
+  };
+
+  const greaterThanZero = (value: number) => {
+    if(value <= 0 ){
+      return "Value must be greater than 0"
+    }
   }
 
   return (
@@ -60,7 +69,12 @@ const FoodDialog: FC<Props> = ({ isOpen, closeDialog, selectedFoodItem }) => {
               <Controller
                 name="name"
                 control={control}
-                rules={{ required: true }}
+                rules={{
+                  required: {
+                    value: true,
+                    message: "Please fill this field",
+                  },
+                }}
                 defaultValue=""
                 render={({ field }) => (
                   <TextField
@@ -75,7 +89,13 @@ const FoodDialog: FC<Props> = ({ isOpen, closeDialog, selectedFoodItem }) => {
               <Controller
                 name="calories"
                 control={control}
-                rules={{ required: true }}
+                rules={{
+                  required: {
+                    value: true,
+                    message: "Please fill this field",
+                  },
+                  validate: greaterThanZero
+                }}
                 defaultValue={0}
                 render={({ field }) => (
                   <TextField
@@ -91,7 +111,13 @@ const FoodDialog: FC<Props> = ({ isOpen, closeDialog, selectedFoodItem }) => {
               <Controller
                 name="price"
                 control={control}
-                rules={{ required: true }}
+                rules={{
+                  required: {
+                    value: true,
+                    message: "Please fill this field",
+                  },
+                  validate: greaterThanZero
+                }}
                 defaultValue={0}
                 render={({ field }) => (
                   <TextField
@@ -109,7 +135,9 @@ const FoodDialog: FC<Props> = ({ isOpen, closeDialog, selectedFoodItem }) => {
               <Button variant="outlined" onClick={closeDialog}>
                 Cancle
               </Button>
-              <Button type="submit" variant="contained">Save</Button>
+              <Button type="submit" variant="contained">
+                Save
+              </Button>
             </Stack>
           </Box>
         </DialogContent>

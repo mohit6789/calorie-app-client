@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import FoodDialog from "../components/FoodDialog";
 import FoodsTable from "../components/FoodsTable";
 import Loader from "../components/Loader";
-import { getFoods } from "../services/foods.service";
+import { addFood, getFoods } from "../services/foods.service";
 import { Food } from "../types/food";
 
 const Home = () => {
@@ -13,14 +13,34 @@ const Home = () => {
     name: "",
   } as Food);
 
-  useEffect(() => {
-    getFoods()
-      .then(setFoods)
-      .finally(() => setIsLoading(false));
+  const fetchFoods = useCallback(async () => {
+    try {
+      const fetchFoods = await getFoods();
+      setFoods(fetchFoods);
+    } catch (e) {
+      console.error(e);
+    }
+    setIsLoading(false);
   }, []);
+
+  useEffect(() => {
+    fetchFoods();
+  }, [fetchFoods]);
 
   const closeDialog = () => {
     setShowDialog(false);
+  };
+
+  const onSave = async (food: Food) => {
+    setIsLoading(true);
+    try {
+      await addFood(food);
+      await fetchFoods();
+      closeDialog();
+    } catch (e) {
+      console.error(e);
+    }
+    setIsLoading(false);
   };
 
   return isLoading ? (
@@ -32,6 +52,7 @@ const Home = () => {
         isOpen={showDialog}
         closeDialog={closeDialog}
         selectedFoodItem={selectedFoodItem}
+        onSave={onSave}
       ></FoodDialog>
     </>
   );
