@@ -3,6 +3,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import FoodDialog from "../components/FoodDialog";
 import FoodsTable from "../components/FoodsTable";
 import Loader from "../components/Loader";
+import SnackBarAlert from "../components/SnackBarAlert";
+import useToast from "../hooks/toast-hook";
 import {
   addFood,
   getFoods,
@@ -18,6 +20,7 @@ const Home = () => {
     price: 0,
   } as Food;
 
+  const { isOpen, hideToast, showToast, message } = useToast();
   const [foods, setFoods] = useState<Food[]>([]);
   const [showDialog, setShowDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,12 +48,13 @@ const Home = () => {
 
   const onSave = async (food: Food) => {
     setIsLoading(true);
-    console.log(food);
     try {
       if (food.id) {
         await updateFood(food);
+        showToast("Food updated successfully.");
       } else {
         await addFood(food);
+        showToast("Food added successfully.");
       }
       await fetchFoods();
       closeDialog();
@@ -61,7 +65,6 @@ const Home = () => {
   };
 
   const showEditDialog = (food: Food) => {
-    console.log(food);
     setShowDialog(true);
     setSelectedFoodItem(food);
   };
@@ -70,10 +73,10 @@ const Home = () => {
     setIsLoading(true);
     try {
       await removeFood(foodId);
-      
       setFoods((foodList) => {
-        return foodList.filter(f => f.id !== foodId);
+        return foodList.filter((f) => f.id !== foodId);
       });
+      showToast("Food removed successfully.");
     } catch (e) {
       console.error(e);
     }
@@ -100,6 +103,9 @@ const Home = () => {
         selectedFoodItem={selectedFoodItem}
         onSave={onSave}
       ></FoodDialog>
+      <SnackBarAlert open={isOpen} close={hideToast}>
+        {message}
+      </SnackBarAlert>
     </>
   );
 };

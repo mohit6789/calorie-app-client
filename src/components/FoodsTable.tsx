@@ -45,7 +45,7 @@ const FoodsTable: React.FC<Props> = ({ foods, showEditDialog, removeFood }) => {
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell align="right">Calories</StyledTableCell>
               <StyledTableCell align="right">Price</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align="right" width="5%"></StyledTableCell>
             </StyledTableRow>
           </TableHead>
           <TableBody>
@@ -60,7 +60,7 @@ const FoodsTable: React.FC<Props> = ({ foods, showEditDialog, removeFood }) => {
                 <StyledTableCell>{row.name}</StyledTableCell>
                 <StyledTableCell align="right">{row.calories}</StyledTableCell>
                 <StyledTableCell align="right">${row.price}</StyledTableCell>
-                <StyledTableCell align="right">
+                <StyledTableCell align="right" style={{whiteSpace: "nowrap"}}>
                   <IconButton onClick={() => showEditDialog(row)}>
                     <EditIcon color="primary" />
                   </IconButton>
