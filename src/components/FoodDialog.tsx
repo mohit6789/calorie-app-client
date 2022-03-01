@@ -20,19 +20,25 @@ const FoodDialog: FC<Props> = ({
   onSave,
 }) => {
   const isEditMode = !!selectedFoodItem.id;
-  const [foodItem, setFoodItem] = useState<Food>(selectedFoodItem);
 
   const {
     control,
+    reset,
     handleSubmit,
     formState: { errors },
-  } = useForm<Food>();
+  } = useForm<Food>({
+    defaultValues: selectedFoodItem,
+  });
 
   useEffect(() => {
-    setFoodItem(selectedFoodItem);
+    reset(selectedFoodItem);
   }, [selectedFoodItem]);
 
   const onSubmit: SubmitHandler<Food> = (data) => {
+    data = {
+      ...selectedFoodItem,
+      ...data,
+    };
     onSave(data);
   };
 
@@ -46,10 +52,10 @@ const FoodDialog: FC<Props> = ({
   };
 
   const greaterThanZero = (value: number) => {
-    if(value <= 0 ){
-      return "Value must be greater than 0"
+    if (value <= 0) {
+      return "Value must be greater than 0";
     }
-  }
+  };
 
   return (
     <div>
@@ -75,7 +81,6 @@ const FoodDialog: FC<Props> = ({
                     message: "Please fill this field",
                   },
                 }}
-                defaultValue=""
                 render={({ field }) => (
                   <TextField
                     error={hasError("name")}
@@ -94,9 +99,8 @@ const FoodDialog: FC<Props> = ({
                     value: true,
                     message: "Please fill this field",
                   },
-                  validate: greaterThanZero
+                  validate: greaterThanZero,
                 }}
-                defaultValue={0}
                 render={({ field }) => (
                   <TextField
                     error={hasError("calories")}
@@ -116,9 +120,8 @@ const FoodDialog: FC<Props> = ({
                     value: true,
                     message: "Please fill this field",
                   },
-                  validate: greaterThanZero
+                  validate: greaterThanZero,
                 }}
-                defaultValue={0}
                 render={({ field }) => (
                   <TextField
                     error={hasError("price")}
@@ -136,7 +139,7 @@ const FoodDialog: FC<Props> = ({
                 Cancle
               </Button>
               <Button type="submit" variant="contained">
-                Save
+                {isEditMode ? "Update" : "Save"}
               </Button>
             </Stack>
           </Box>
